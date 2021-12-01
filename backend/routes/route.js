@@ -14,9 +14,27 @@ router.post('/signup',(req,res) =>{
         res.status(201).json(data);
     })
     .catch(err => {
-        res.json(`problem at creating user :- ${err}`);
+        res.status(500).json(`problem at creating user :- ${err}`);
     })
 })
 
+router.post('/login',async (req, res) => {
+	const User = await User_sch.findOne({
+		email: req.body.email,
+        password: req.body.password
+	})
+
+	if (!User) {
+		res.json( { success : false,status: 'error', error: 'Invalid login' });
+	}
+    else{
+        res.status(200).json({
+            success : true,
+            message : "Successfully Logged in",
+            User_data : User
+        })
+    }
+}
+    )
 
 module.exports = router;
